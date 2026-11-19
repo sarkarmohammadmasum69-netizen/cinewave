@@ -1,0 +1,31 @@
+# CineWave — Render Free demo (no card needed)
+# Demo only: Render Free has an ephemeral filesystem, so the SQLite
+# database in data/ and uploaded movies in uploads/ are LOST on every
+# restart, spin-down (15 min idle) or redeploy. Do not use this for a
+# permanent movie library. For a permanent library use a VPS.
+# How to use:
+#  1. Push this project to a GitHub repo (do NOT commit .env).
+#  2. Render dashboard -> New -> Web Service -> pick the repo.
+#     Render detects render.yaml automatically.
+#  3. In the dashboard, set ADMIN_PASSWORD to a strong password you
+#     choose (SESSION_SECRET is generated below). Then deploy.
+#  4. First visit takes ~1 min to wake the free service.
+services:
+  - type: web
+    name: cinewave
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MAX_UPLOAD_MB
+        value: "100"

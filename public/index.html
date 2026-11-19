@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b12">
+  <title>CineWave — Movie Streaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">C</span><span>CINE<span class="accent">WAVE</span></span></a>
+  <nav><a class="active" href="/">হোম</a><a href="#catalog">মুভি</a><a href="#about">আমাদের সম্পর্কে</a></nav>
+  <div class="top-actions"><label class="search"><span>⌕</span><input id="searchInput" placeholder="মুভি খুঁজুন..."></label><a class="admin-link" href="/admin.html">Admin Login ↗</a></div>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="live-dot"></span> YOUR CINEMA, YOUR WAY</div>
+      <h1>বড় পর্দার<br><span>অনুভূতি</span> এখন ঘরে</h1>
+      <p>আপনার পছন্দের সিনেমা, এক জায়গায়। নতুন গল্প আবিষ্কার করুন এবং উপভোগ করুন নিজের গতিতে।</p>
+      <a class="primary-btn" href="#catalog">মুভি এক্সপ্লোর করুন <b>→</b></a>
+      <div class="hero-meta"><span>✦ নির্বাচিত কালেকশন</span><span>● নিয়মিত আপডেট</span><span>◉ HD প্লেব্যাক</span></div>
+    </div>
+    <div class="hero-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="poster-stack"><div class="poster poster-back"></div><div class="poster poster-front"><span>FEATURED<br>COLLECTION</span><b>THE<br>STORY<br>BEGINS</b><small>CINEWAVE ORIGINALS</small></div></div><div class="floating-tag">NOW SHOWING <strong>✦</strong></div></div>
+  </section>
+  <section class="catalog section" id="catalog">
+    <div class="section-heading"><div><div class="eyebrow">DISCOVER SOMETHING NEW</div><h2>মুভি কালেকশন</h2><p>আপনার পরবর্তী প্রিয় সিনেমাটি খুঁজে নিন</p></div><select id="categoryFilter"><option value="">সব ক্যাটাগরি</option></select></div>
+    <div id="movieGrid" class="movie-grid"><div class="empty">মুভি লোড হচ্ছে...</div></div>
+  </section>
+  <section class="bottom-banner" id="about"><div><div class="eyebrow">WELCOME TO CINEWAVE</div><h2>প্রতিটি গল্পের<br>আলাদা এক জগৎ আছে।</h2></div><p>আপনার লাইব্রেরিতে থাকা অথবা প্রকাশের অনুমতি পাওয়া ভিডিও উপভোগ করুন—সহজ, সুন্দর ও গোছানো অভিজ্ঞতায়।</p></section>
+</main>
+<footer><a class="brand" href="/"><span class="brand-mark">C</span><span>CINE<span class="accent">WAVE</span></span></a><span>© <span id="year"></span> CineWave. All rights reserved.</span><span>Watch responsibly.</span></footer>
+<div class="modal hidden" id="movieModal"><div class="modal-panel"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
+<script src="/app.js"></script>
+</body></html>

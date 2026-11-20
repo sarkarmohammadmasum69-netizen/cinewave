@@ -10,7 +10,7 @@ let editingId = null;
 async function api(url, options = {}) {
   const res = await fetch(url, options);
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || "অনুরোধটি সম্পন্ন হয়নি।");
+  if (!res.ok) throw new Error(data.error || "The request could not be completed.");
   return data;
 }
 async function checkLogin() {
@@ -22,7 +22,7 @@ async function checkLogin() {
   } catch {}
 }
 loginForm.addEventListener("submit", async e => {
-  e.preventDefault(); loginMessage.textContent = "লগইন হচ্ছে...";
+  e.preventDefault(); loginMessage.textContent = "Logging in...";
   const fd = new FormData(loginForm);
   try {
     await api("/api/admin/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(fd)) });
@@ -43,11 +43,11 @@ async function refreshDashboard() {
 }
 function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c])); }
 function renderAdminList(movies) {
-  if (!movies.length) { list.innerHTML = '<p class="security-note">এখনো কোনো মুভি নেই। বাম পাশের ফর্ম থেকে প্রথম মুভিটি যোগ করুন।</p>'; return; }
+  if (!movies.length) { list.innerHTML = '<p class="security-note">No movies yet. Add the first one using the form on the left.</p>'; return; }
   list.innerHTML = movies.map(m => `<div class="admin-movie-row">
     ${m.poster ? `<img src="${m.poster}" alt="">` : '<div class="admin-thumb"></div>'}
     <div class="admin-row-info"><b>${esc(m.title)}</b><small>${esc(m.category)} ${m.release_year ? " • " + m.release_year : ""}</small></div>
-    <div class="row-actions"><button class="outline-btn" data-edit="${m.id}">এডিট</button><button class="outline-btn" data-delete="${m.id}">ডিলিট</button></div>
+    <div class="row-actions"><button class="outline-btn" data-edit="${m.id}">Edit</button><button class="outline-btn" data-delete="${m.id}">Delete</button></div>
   </div>`).join("");
   list.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => editMovie(b.dataset.edit)));
   list.querySelectorAll("[data-delete]").forEach(b => b.addEventListener("click", () => deleteMovie(b.dataset.delete)));
@@ -57,17 +57,17 @@ async function editMovie(id) {
   editingId = Number(id);
   for (const key of ["title","category","release_year","duration","description"]) movieForm.elements[key].value = m[key] || "";
   movieForm.elements.movieId.value = id;
-  document.getElementById("formTitle").textContent = "মুভি এডিট করুন";
-  document.getElementById("saveMovieBtn").textContent = "পরিবর্তন সেভ করুন →";
+  document.getElementById("formTitle").textContent = "Edit movie";
+  document.getElementById("saveMovieBtn").textContent = "Save changes →";
   document.getElementById("cancelEdit").classList.remove("hidden");
-  formMessage.textContent = "নতুন ভিডিও বা পোস্টার না দিলে আগের ফাইল থাকবে।";
+  formMessage.textContent = "If you don't add a new video or poster, the previous file stays.";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 function resetMovieForm() {
   editingId = null; movieForm.reset(); movieForm.elements.movieId.value = "";
-  movieForm.elements.category.value = "অন্যান্য";
-  document.getElementById("formTitle").textContent = "নতুন মুভি যোগ করুন";
-  document.getElementById("saveMovieBtn").textContent = "মুভি সেভ করুন →";
+  movieForm.elements.category.value = "Other";
+  document.getElementById("formTitle").textContent = "Add a new movie";
+  document.getElementById("saveMovieBtn").textContent = "Save movie →";
   document.getElementById("cancelEdit").classList.add("hidden");
   formMessage.textContent = "";
 }
@@ -75,18 +75,18 @@ document.getElementById("cancelEdit").addEventListener("click", resetMovieForm);
 movieForm.addEventListener("submit", async e => {
   e.preventDefault();
   const btn = document.getElementById("saveMovieBtn");
-  btn.disabled = true; btn.textContent = "আপলোড হচ্ছে...";
-  formMessage.textContent = "ফাইল আপলোড হতে সময় লাগতে পারে।";
+  btn.disabled = true; btn.textContent = "Uploading...";
+  formMessage.textContent = "Uploading a file may take a while.";
   try {
     const method = editingId ? "PUT" : "POST";
     const url = editingId ? `/api/admin/movies/${editingId}` : "/api/admin/movies";
     await api(url, { method, body: new FormData(movieForm) });
-    resetMovieForm(); formMessage.textContent = "মুভি সফলভাবে সেভ হয়েছে।"; refreshDashboard();
+    resetMovieForm(); formMessage.textContent = "Movie saved successfully."; refreshDashboard();
   } catch (err) { formMessage.textContent = err.message; }
-  finally { btn.disabled = false; btn.textContent = editingId ? "পরিবর্তন সেভ করুন →" : "মুভি সেভ করুন →"; }
+  finally { btn.disabled = false; btn.textContent = editingId ? "Save changes →" : "Save movie →"; }
 });
 async function deleteMovie(id) {
-  if (!confirm("এই মুভি ও এর আপলোড করা ফাইল ডিলিট করবেন?")) return;
+  if (!confirm("Delete this movie and its uploaded files?")) return;
   try { await api("/api/admin/movies/" + id, { method: "DELETE" }); refreshDashboard(); }
   catch (err) { alert(err.message); }
 }

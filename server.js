@@ -38,7 +38,7 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT DEFAULT '',
-    category TEXT DEFAULT 'অন্যান্য',
+    category TEXT DEFAULT 'Other',
     release_year INTEGER,
     duration TEXT DEFAULT '',
     poster TEXT DEFAULT '',
@@ -109,13 +109,13 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     if (file.fieldname === "poster" && allowedPoster.has(file.mimetype)) return cb(null, true);
     if (file.fieldname === "video" && allowedVideo.has(file.mimetype)) return cb(null, true);
-    cb(new Error("এই ফাইলের ধরন অনুমোদিত নয়। JPG/PNG/WebP পোস্টার এবং MP4/WebM/OGG ভিডিও ব্যবহার করুন।"));
+    cb(new Error("This file type is not allowed. Use a JPG/PNG/WebP poster and an MP4/WebM/OGG video."));
   }
 });
 
 function requireAdmin(req, res, next) {
   if (req.session && req.session.adminId) return next();
-  return res.status(401).json({ error: "প্রথমে অ্যাডমিন হিসেবে লগইন করুন।" });
+  return res.status(401).json({ error: "Please log in as admin first." });
 }
 function safeDelete(relativePath) {
   if (!relativePath) return;
@@ -143,7 +143,7 @@ app.get("/api/movies", (req, res) => {
 
 app.get("/api/movies/:id", (req, res) => {
   const movie = db.prepare("SELECT id,title,description,category,release_year,duration,poster,video,created_at FROM movies WHERE id = ?").get(Number(req.params.id));
-  if (!movie) return res.status(404).json({ error: "মুভি পাওয়া যায়নি।" });
+  if (!movie) return res.status(404).json({ error: "Movie not found." });
   res.json(movie);
 });
 
@@ -151,10 +151,10 @@ app.post("/api/admin/login", loginLimiter, (req, res) => {
   const { username, password } = req.body || {};
   const admin = db.prepare("SELECT * FROM admins WHERE username = ?").get(String(username || ""));
   if (!admin || !bcrypt.compareSync(String(password || ""), admin.password_hash)) {
-    return res.status(401).json({ error: "ইউজারনেম অথবা পাসওয়ার্ড সঠিক নয়।" });
+    return res.status(401).json({ error: "Username or password is incorrect." });
   }
   req.session.regenerate(err => {
-    if (err) return res.status(500).json({ error: "লগইন করা যায়নি।" });
+    if (err) return res.status(500).json({ error: "Could not log in." });
     req.session.adminId = admin.id;
     req.session.adminUsername = admin.username;
     res.json({ ok: true, username: admin.username });
@@ -178,7 +178,7 @@ app.get("/api/admin/stats", requireAdmin, (req, res) => {
 
 app.post("/api/admin/movies", requireAdmin, upload.fields([{ name: "poster", maxCount: 1 }, { name: "video", maxCount: 1 }]), (req, res) => {
   const title = String(req.body.title || "").trim();
-  if (!title) return res.status(400).json({ error: "মুভির নাম দিতে হবে।" });
+  if (!title) return res.status(400).json({ error: "A movie title is required." });
   const videoFile = req.files?.video?.[0];
   const posterFile = req.files?.poster?.[0];
   const poster = posterFile ? `/uploads/posters/${posterFile.filename}` : "";
@@ -191,7 +191,7 @@ app.post("/api/admin/movies", requireAdmin, upload.fields([{ name: "poster", max
   `).run(
     title,
     String(req.body.description || "").trim(),
-    String(req.body.category || "অন্যান্য").trim().slice(0, 60),
+    String(req.body.category || "Other").trim().slice(0, 60),
     Number(req.body.release_year) || null,
     String(req.body.duration || "").trim().slice(0, 30),
     poster,
@@ -203,9 +203,9 @@ app.post("/api/admin/movies", requireAdmin, upload.fields([{ name: "poster", max
 app.put("/api/admin/movies/:id", requireAdmin, upload.fields([{ name: "poster", maxCount: 1 }, { name: "video", maxCount: 1 }]), (req, res) => {
   const id = Number(req.params.id);
   const old = db.prepare("SELECT * FROM movies WHERE id = ?").get(id);
-  if (!old) return res.status(404).json({ error: "মুভি পাওয়া যায়নি।" });
+  if (!old) return res.status(404).json({ error: "Movie not found." });
   const title = String(req.body.title || "").trim();
-  if (!title) return res.status(400).json({ error: "মুভির নাম দিতে হবে।" });
+  if (!title) return res.status(400).json({ error: "A movie title is required." });
   const posterFile = req.files?.poster?.[0];
   const videoFile = req.files?.video?.[0];
   const poster = posterFile ? `/uploads/posters/${posterFile.filename}` : old.poster;
@@ -215,7 +215,7 @@ app.put("/api/admin/movies/:id", requireAdmin, upload.fields([{ name: "poster", 
   `).run(
     title,
     String(req.body.description || "").trim(),
-    String(req.body.category || "অন্যান্য").trim().slice(0, 60),
+    String(req.body.category || "Other").trim().slice(0, 60),
     Number(req.body.release_year) || null,
     String(req.body.duration || "").trim().slice(0, 30),
     poster, video, id
@@ -228,7 +228,7 @@ app.put("/api/admin/movies/:id", requireAdmin, upload.fields([{ name: "poster", 
 app.delete("/api/admin/movies/:id", requireAdmin, (req, res) => {
   const id = Number(req.params.id);
   const movie = db.prepare("SELECT poster,video FROM movies WHERE id = ?").get(id);
-  if (!movie) return res.status(404).json({ error: "মুভি পাওয়া যায়নি।" });
+  if (!movie) return res.status(404).json({ error: "Movie not found." });
   db.prepare("DELETE FROM movies WHERE id = ?").run(id);
   safeDelete(movie.poster);
   safeDelete(movie.video);
@@ -238,8 +238,8 @@ app.delete("/api/admin/movies/:id", requireAdmin, (req, res) => {
 app.use((err, req, res, next) => {
   console.error(err);
   const message = err instanceof multer.MulterError
-    ? (err.code === "LIMIT_FILE_SIZE" ? "ফাইলের আকার নির্ধারিত সীমার চেয়ে বড়।" : "ফাইল আপলোডে সমস্যা হয়েছে।")
-    : (err.message || "সার্ভারে সমস্যা হয়েছে।");
+    ? (err.code === "LIMIT_FILE_SIZE" ? "The file is larger than the allowed size." : "There was a problem uploading the file.")
+    : (err.message || "There was a server problem.");
   res.status(400).json({ error: message });
 });
 

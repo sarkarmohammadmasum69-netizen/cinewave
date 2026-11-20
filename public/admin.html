@@ -1,27 +1,27 @@
 <!doctype html>
-<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — CineWave</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin — CineWave</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css"></head>
 <body class="admin-body">
-<header class="topbar"><a class="brand" href="/"><span class="brand-mark">C</span><span>CINE<span class="accent">WAVE</span></span></a><a class="admin-link" href="/">← ওয়েবসাইটে ফিরে যান</a></header>
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark">C</span><span>CINE<span class="accent">WAVE</span></span></a><a class="admin-link" href="/">← Back to website</a></header>
 <main class="admin-wrap">
-  <section id="loginPanel" class="login-card"><div class="eyebrow">SECURE ADMIN ACCESS</div><h1>অ্যাডমিন লগইন</h1><p>আপনার ড্যাশবোর্ডে প্রবেশ করতে লগইন করুন।</p><form id="loginForm"><label>ইউজারনেম<input name="username" autocomplete="username" required></label><label>পাসওয়ার্ড<input name="password" type="password" autocomplete="current-password" required></label><button class="primary-btn full">লগইন করুন →</button><div class="notice" id="loginMessage"></div></form></section>
+  <section id="loginPanel" class="login-card"><div class="eyebrow">SECURE ADMIN ACCESS</div><h1>Admin Login</h1><p>Log in to enter your dashboard.</p><form id="loginForm"><label>Username<input name="username" autocomplete="username" required></label><label>Password<input name="password" type="password" autocomplete="current-password" required></label><button class="primary-btn full">Log in →</button><div class="notice" id="loginMessage"></div></form></section>
   <section id="dashboard" class="dashboard hidden">
-    <div class="dash-head"><div><div class="eyebrow">CONTROL CENTER</div><h1>অ্যাডমিন ড্যাশবোর্ড</h1><p>মুভি লাইব্রেরি পরিচালনা করুন</p></div><button id="logoutBtn" class="outline-btn">লগআউট ↗</button></div>
-    <div class="stats"><div class="stat"><span>মোট মুভি</span><b id="totalMovies">0</b></div><div class="stat"><span>ক্যাটাগরি</span><b id="totalCategories">0</b></div><div class="stat"><span>স্ট্যাটাস</span><b class="status">● অনলাইন</b></div></div>
+    <div class="dash-head"><div><div class="eyebrow">CONTROL CENTER</div><h1>Admin Dashboard</h1><p>Manage your movie library</p></div><button id="logoutBtn" class="outline-btn">Log out ↗</button></div>
+    <div class="stats"><div class="stat"><span>Total movies</span><b id="totalMovies">0</b></div><div class="stat"><span>Categories</span><b id="totalCategories">0</b></div><div class="stat"><span>Status</span><b class="status">● Online</b></div></div>
     <div class="admin-grid">
-      <section class="form-card"><div class="card-heading"><div><div class="eyebrow">LIBRARY MANAGER</div><h2 id="formTitle">নতুন মুভি যোগ করুন</h2></div></div>
+      <section class="form-card"><div class="card-heading"><div><div class="eyebrow">LIBRARY MANAGER</div><h2 id="formTitle">Add a new movie</h2></div></div>
         <form id="movieForm" enctype="multipart/form-data">
           <input type="hidden" name="movieId">
-          <label>মুভির নাম *<input name="title" required placeholder="যেমন: The Journey"></label>
-          <div class="two-col"><label>ক্যাটাগরি<input name="category" placeholder="Action, Drama..." value="অন্যান্য"></label><label>রিলিজ ইয়ার<input name="release_year" type="number" min="1888" max="2100" placeholder="2026"></label></div>
-          <label>সময়কাল<input name="duration" placeholder="2h 10m"></label>
-          <label>বিবরণ<textarea name="description" rows="4" placeholder="মুভি সম্পর্কে লিখুন..."></textarea></label>
-          <label class="file-label">পোস্টার ছবি <input name="poster" type="file" accept="image/png,image/jpeg,image/webp,image/avif"><small>JPG, PNG বা WebP • ঐচ্ছিক</small></label>
-          <label class="file-label">ভিডিও ফাইল <input name="video" type="file" accept="video/mp4,video/webm,video/ogg" id="videoInput"><small>MP4 / WebM / OGG • ঐচ্ছিক — পরে এডিট করে যোগ করা যাবে</small></label>
-          <div class="form-actions"><button class="primary-btn" id="saveMovieBtn">মুভি সেভ করুন →</button><button type="button" class="outline-btn hidden" id="cancelEdit">বাতিল</button></div><div class="notice" id="formMessage"></div>
+          <label>Movie title *<input name="title" required placeholder="e.g. The Journey"></label>
+          <div class="two-col"><label>Category<input name="category" placeholder="Action, Drama..." value="Other"></label><label>Release year<input name="release_year" type="number" min="1888" max="2100" placeholder="2026"></label></div>
+          <label>Duration<input name="duration" placeholder="2h 10m"></label>
+          <label>Description<textarea name="description" rows="4" placeholder="Write about the movie..."></textarea></label>
+          <label class="file-label">Poster image <input name="poster" type="file" accept="image/png,image/jpeg,image/webp,image/avif"><small>JPG, PNG or WebP • Optional</small></label>
+          <label class="file-label">Video file <input name="video" type="file" accept="video/mp4,video/webm,video/ogg" id="videoInput"><small>MP4 / WebM / OGG • Optional — can be added later via Edit</small></label>
+          <div class="form-actions"><button class="primary-btn" id="saveMovieBtn">Save movie →</button><button type="button" class="outline-btn hidden" id="cancelEdit">Cancel</button></div><div class="notice" id="formMessage"></div>
         </form>
       </section>
-      <section class="list-card"><div class="card-heading"><div><div class="eyebrow">YOUR CONTENT</div><h2>আপলোড করা মুভি</h2></div><button class="outline-btn small" id="refreshBtn">↻ রিফ্রেশ</button></div><div id="adminMovieList" class="admin-movie-list">লোড হচ্ছে...</div></section>
+      <section class="list-card"><div class="card-heading"><div><div class="eyebrow">YOUR CONTENT</div><h2>Uploaded movies</h2></div><button class="outline-btn small" id="refreshBtn">↻ Refresh</button></div><div id="adminMovieList" class="admin-movie-list">Loading...</div></section>
     </div>
-    <p class="security-note">নিরাপত্তা: শুধু নিজের বা প্রকাশের অনুমতি থাকা কনটেন্ট আপলোড করুন। বড় ভিডিও ফাইল হোস্ট করতে সার্ভারের স্টোরেজ ও ব্যান্ডউইথ যথেষ্ট আছে কি না নিশ্চিত করুন।</p>
+    <p class="security-note">Security: only upload content you own or have permission to publish. For large video files, make sure the server has enough storage and bandwidth.</p>
   </section>
 </main><script src="/admin.js"></script></body></html>

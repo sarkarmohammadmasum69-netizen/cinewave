@@ -74,8 +74,6 @@ function resetMovieForm() {
 document.getElementById("cancelEdit").addEventListener("click", resetMovieForm);
 movieForm.addEventListener("submit", async e => {
   e.preventDefault();
-  const video = movieForm.elements.video.files[0];
-  if (!editingId && !video) { formMessage.textContent = "ভিডিও ফাইল নির্বাচন করুন।"; return; }
   const btn = document.getElementById("saveMovieBtn");
   btn.disabled = true; btn.textContent = "আপলোড হচ্ছে...";
   formMessage.textContent = "ফাইল আপলোড হতে সময় লাগতে পারে।";

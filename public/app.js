@@ -41,7 +41,7 @@ async function openMovie(id) {
   modalContent.innerHTML = `<div class="movie-detail">
     ${m.poster ? `<img src="${m.poster}" alt="${escapeHtml(m.title)}">` : '<div class="detail-placeholder"></div>'}
     <div><div class="eyebrow">CINEWAVE MOVIE</div><h2>${escapeHtml(m.title)}</h2><p>${escapeHtml(m.category || "অন্যান্য")} ${m.release_year ? " • " + m.release_year : ""} ${m.duration ? " • " + escapeHtml(m.duration) : ""}</p><p>${escapeHtml(m.description || "এই মুভির জন্য কোনো বিবরণ যোগ করা হয়নি।")}</p></div>
-    <div style="grid-column:1/-1"><video controls playsinline preload="metadata" src="${m.video}">আপনার ব্রাউজার ভিডিও প্লে সমর্থন করে না।</video></div>
+    <div style="grid-column:1/-1">${m.video ? `<video controls playsinline preload="metadata" src="${m.video}">আপনার ব্রাউজার ভিডিও প্লে সমর্থন করে না।</video>` : '<div class="empty">🎬 ভিডিও শীঘ্রই আসছে — আপাতত পোস্টার কার্ড দেখুন।</div>'}</div>
   </div>`;
   modal.classList.remove("hidden");
 }

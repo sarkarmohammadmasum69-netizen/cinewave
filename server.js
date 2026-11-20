@@ -180,10 +180,11 @@ app.post("/api/admin/movies", requireAdmin, upload.fields([{ name: "poster", max
   const title = String(req.body.title || "").trim();
   if (!title) return res.status(400).json({ error: "মুভির নাম দিতে হবে।" });
   const videoFile = req.files?.video?.[0];
-  if (!videoFile) return res.status(400).json({ error: "ভিডিও ফাইল আপলোড করুন।" });
   const posterFile = req.files?.poster?.[0];
   const poster = posterFile ? `/uploads/posters/${posterFile.filename}` : "";
-  const video = `/uploads/videos/${videoFile.filename}`;
+  // Video is optional at creation: a poster-only card can be added now
+  // and the video uploaded later via Edit. Empty string, never NULL.
+  const video = videoFile ? `/uploads/videos/${videoFile.filename}` : "";
   const result = db.prepare(`
     INSERT INTO movies (title,description,category,release_year,duration,poster,video)
     VALUES (?,?,?,?,?,?,?)

@@ -12,6 +12,10 @@ const fs = require("fs");
 const crypto = require("crypto");
 
 const app = express();
+// Railway/Render terminate TLS at their proxy and forward HTTP to the app.
+// Without this, Express thinks the request is plain HTTP and refuses to
+// set the secure session cookie, so admin login never sticks.
+app.set("trust proxy", 1);
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, "data");
